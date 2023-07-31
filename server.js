@@ -7,15 +7,13 @@ const path = require('path');
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
+const connectDatabase = require('./config/configDatabase');
 
 const app = express();
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
-// DB Config
-const db = require('./config/keys').mongoURI;
 
 // Support for MongoDB 4+
 mongoose.set('useFindAndModify', false);
@@ -24,10 +22,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
 // Connect to MongoDB
-mongoose
-    .connect(db)
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(`MongoDB Connection Error: ${err}`));
+connectDatabase();
 
 // Passport middleware
 app.use(passport.initialize());
